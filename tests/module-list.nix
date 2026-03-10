@@ -26,12 +26,9 @@
   ../modules/flow-launcher.nix
   ../modules/wezterm.nix
   ../modules/alacritty.nix
-  ../modules/espanso.nix
   ../modules/powertoys.nix
   ../modules/firefox.nix
-  ../modules/nushell.nix
   ../modules/oh-my-posh.nix
-  ../modules/mpv.nix
   ../modules/rio.nix
   ../modules/edge.nix
   ../modules/chrome.nix

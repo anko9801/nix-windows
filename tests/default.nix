@@ -555,41 +555,6 @@ in
         ];
     };
 
-    # Espanso config
-    espanso-config = mkTest {
-      name = "espanso-config";
-      config = {
-        programs.espanso = {
-          enable = true;
-          config = {
-            toggle_key = "ALT";
-          };
-          matches = {
-            "base" = {
-              matches = [
-                {
-                  trigger = ":date";
-                  replace = "{{date}}";
-                }
-              ];
-            };
-          };
-        };
-      };
-      assertions =
-        { cfg, ... }:
-        [
-          {
-            ok = cfg.windows.file ? "%APPDATA%/espanso/config/default.yml";
-            msg = "espanso should create default.yml config";
-          }
-          {
-            ok = cfg.windows.file ? "%APPDATA%/espanso/match/base.yml";
-            msg = "espanso should create base.yml match file";
-          }
-        ];
-    };
-
     # PowerToys config
     powertoys-config = mkTest {
       name = "powertoys-config";
@@ -641,30 +606,6 @@ in
         ];
     };
 
-    # Nushell config
-    nushell-config = mkTest {
-      name = "nushell-config";
-      config = {
-        programs.nushell = {
-          enable = true;
-          configFile = "$env.config.show_banner = false";
-          envFile = "$env.PATH = ($env.PATH | prepend 'C:\\Tools')";
-        };
-      };
-      assertions =
-        { cfg, ... }:
-        [
-          {
-            ok = cfg.windows.file ? "%APPDATA%/nushell/config.nu";
-            msg = "nushell should create config.nu";
-          }
-          {
-            ok = cfg.windows.file ? "%APPDATA%/nushell/env.nu";
-            msg = "nushell should create env.nu";
-          }
-        ];
-    };
-
     # Oh My Posh config
     oh-my-posh-config = mkTest {
       name = "oh-my-posh-config";
@@ -684,42 +625,6 @@ in
           {
             ok = cfg.windows.file ? "%USERPROFILE%/.config/oh-my-posh/config.json";
             msg = "oh-my-posh should create config.json";
-          }
-        ];
-    };
-
-    # mpv config
-    mpv-config = mkTest {
-      name = "mpv-config";
-      config = {
-        programs.mpv = {
-          enable = true;
-          settings = {
-            hwdec = "auto";
-            vo = "gpu-next";
-          };
-          bindings = {
-            "WHEEL_UP" = "add volume 2";
-          };
-        };
-      };
-      assertions =
-        { cfg, ... }:
-        let
-          mpvConf = cfg.windows.file."%APPDATA%/mpv/mpv.conf".text;
-        in
-        [
-          {
-            ok = cfg.windows.file ? "%APPDATA%/mpv/mpv.conf";
-            msg = "mpv should create mpv.conf";
-          }
-          {
-            ok = lib.hasInfix "hwdec=auto" mpvConf;
-            msg = "mpv.conf should contain hwdec setting";
-          }
-          {
-            ok = cfg.windows.file ? "%APPDATA%/mpv/input.conf";
-            msg = "mpv should create input.conf";
           }
         ];
     };
