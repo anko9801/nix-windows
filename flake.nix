@@ -57,9 +57,12 @@
         firefox = ./modules/firefox.nix;
         nushell = ./modules/nushell.nix;
         oh-my-posh = ./modules/oh-my-posh.nix;
-        fastfetch = ./modules/fastfetch.nix;
         mpv = ./modules/mpv.nix;
         rio = ./modules/rio.nix;
+        edge = ./modules/edge.nix;
+        chrome = ./modules/chrome.nix;
+        brave = ./modules/brave.nix;
+        scoop = ./modules/scoop.nix;
       };
 
       builtinModules = nixpkgs.lib.attrValues moduleSet;

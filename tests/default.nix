@@ -688,27 +688,6 @@ in
         ];
     };
 
-    # Fastfetch config
-    fastfetch-config = mkTest {
-      name = "fastfetch-config";
-      config = {
-        programs.fastfetch = {
-          enable = true;
-          settings = {
-            logo.type = "small";
-          };
-        };
-      };
-      assertions =
-        { cfg, ... }:
-        [
-          {
-            ok = cfg.windows.file ? "%LOCALAPPDATA%/fastfetch/config.jsonc";
-            msg = "fastfetch should create config.jsonc";
-          }
-        ];
-    };
-
     # mpv config
     mpv-config = mkTest {
       name = "mpv-config";
@@ -763,6 +742,93 @@ in
           {
             ok = cfg.windows.file ? "%LOCALAPPDATA%/rio/config.toml";
             msg = "rio should create config.toml";
+          }
+        ];
+    };
+
+    # Edge policies
+    edge-policies = mkTest {
+      name = "edge-policies";
+      config = {
+        programs.edge = {
+          enable = true;
+          policies = {
+            HomepageLocation = "https://example.com";
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok =
+              cfg.windows.file ? "%PROGRAMFILES(X86)%/Microsoft/Edge/Application/policies/managed/policies.json";
+            msg = "edge should create policies.json";
+          }
+        ];
+    };
+
+    # Chrome policies
+    chrome-policies = mkTest {
+      name = "chrome-policies";
+      config = {
+        programs.chrome = {
+          enable = true;
+          policies = {
+            HomepageLocation = "https://example.com";
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%PROGRAMFILES%/Google/Chrome/Application/policies/managed/policies.json";
+            msg = "chrome should create policies.json";
+          }
+        ];
+    };
+
+    # Brave policies
+    brave-policies = mkTest {
+      name = "brave-policies";
+      config = {
+        programs.brave = {
+          enable = true;
+          policies = {
+            HomepageLocation = "https://example.com";
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok =
+              cfg.windows.file
+              ? "%PROGRAMFILES%/BraveSoftware/Brave-Browser/Application/policies/managed/policies.json";
+            msg = "brave should create policies.json";
+          }
+        ];
+    };
+
+    # Scoop config
+    scoop-config = mkTest {
+      name = "scoop-config";
+      config = {
+        programs.scoop = {
+          enable = true;
+          config = {
+            use_lessmsi = true;
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%USERPROFILE%/.config/scoop/config.json";
+            msg = "scoop should create config.json";
           }
         ];
     };

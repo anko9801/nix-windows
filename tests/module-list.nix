@@ -31,7 +31,10 @@
   ../modules/firefox.nix
   ../modules/nushell.nix
   ../modules/oh-my-posh.nix
-  ../modules/fastfetch.nix
   ../modules/mpv.nix
   ../modules/rio.nix
+  ../modules/edge.nix
+  ../modules/chrome.nix
+  ../modules/brave.nix
+  ../modules/scoop.nix
 ]
