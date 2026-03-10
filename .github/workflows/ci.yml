@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Format check
+        run: nix fmt -- --ci
+
+      - name: Lint
+        run: nix run nixpkgs#statix -- check .
+
+      - name: Dead code
+        run: nix run nixpkgs#deadnix -- --fail .
+
+      - name: Flake check
+        run: nix flake check

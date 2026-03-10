@@ -1,5 +1,7 @@
 # nix-windows
 
+[![CI](https://github.com/anko9801/nix-windows/actions/workflows/ci.yml/badge.svg)](https://github.com/anko9801/nix-windows/actions/workflows/ci.yml)
+
 Declarative Windows configuration — packages, dotfiles, services, and registry — defined in Nix, deployed from WSL.
 
 Built on `lib.evalModules`, the same module system as NixOS and Home Manager.
