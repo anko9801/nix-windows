@@ -512,6 +512,261 @@ in
         ];
     };
 
+    # WezTerm config
+    wezterm-config = mkTest {
+      name = "wezterm-config";
+      config = {
+        programs.wezterm = {
+          enable = true;
+          extraConfig = ''
+            local wezterm = require 'wezterm'
+            return { font_size = 14.0 }
+          '';
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%USERPROFILE%/.wezterm.lua";
+            msg = "wezterm should create .wezterm.lua file entry";
+          }
+        ];
+    };
+
+    # Alacritty config
+    alacritty-config = mkTest {
+      name = "alacritty-config";
+      config = {
+        programs.alacritty = {
+          enable = true;
+          settings = {
+            font.size = 12;
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%APPDATA%/alacritty/alacritty.toml";
+            msg = "alacritty should create alacritty.toml file entry";
+          }
+        ];
+    };
+
+    # Espanso config
+    espanso-config = mkTest {
+      name = "espanso-config";
+      config = {
+        programs.espanso = {
+          enable = true;
+          config = {
+            toggle_key = "ALT";
+          };
+          matches = {
+            "base" = {
+              matches = [
+                {
+                  trigger = ":date";
+                  replace = "{{date}}";
+                }
+              ];
+            };
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%APPDATA%/espanso/config/default.yml";
+            msg = "espanso should create default.yml config";
+          }
+          {
+            ok = cfg.windows.file ? "%APPDATA%/espanso/match/base.yml";
+            msg = "espanso should create base.yml match file";
+          }
+        ];
+    };
+
+    # PowerToys config
+    powertoys-config = mkTest {
+      name = "powertoys-config";
+      config = {
+        programs.powertoys = {
+          enable = true;
+          settings = {
+            theme = "dark";
+          };
+          modules = {
+            "FancyZones" = {
+              "fancyzones_editor_hotkey" = "Win+Shift+Backtick";
+            };
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%LOCALAPPDATA%/Microsoft/PowerToys/settings.json";
+            msg = "powertoys should create settings.json";
+          }
+          {
+            ok = cfg.windows.file ? "%LOCALAPPDATA%/Microsoft/PowerToys/FancyZones/settings.json";
+            msg = "powertoys should create FancyZones/settings.json";
+          }
+        ];
+    };
+
+    # Firefox policies
+    firefox-policies = mkTest {
+      name = "firefox-policies";
+      config = {
+        programs.firefox = {
+          enable = true;
+          policies = {
+            DisableTelemetry = true;
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%PROGRAMFILES%/Mozilla Firefox/distribution/policies.json";
+            msg = "firefox should create policies.json";
+          }
+        ];
+    };
+
+    # Nushell config
+    nushell-config = mkTest {
+      name = "nushell-config";
+      config = {
+        programs.nushell = {
+          enable = true;
+          configFile = "$env.config.show_banner = false";
+          envFile = "$env.PATH = ($env.PATH | prepend 'C:\\Tools')";
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%APPDATA%/nushell/config.nu";
+            msg = "nushell should create config.nu";
+          }
+          {
+            ok = cfg.windows.file ? "%APPDATA%/nushell/env.nu";
+            msg = "nushell should create env.nu";
+          }
+        ];
+    };
+
+    # Oh My Posh config
+    oh-my-posh-config = mkTest {
+      name = "oh-my-posh-config";
+      config = {
+        programs.oh-my-posh = {
+          enable = true;
+          enablePowerShellIntegration = false;
+          settings = {
+            "$schema" = "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json";
+            blocks = [ ];
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%USERPROFILE%/.config/oh-my-posh/config.json";
+            msg = "oh-my-posh should create config.json";
+          }
+        ];
+    };
+
+    # Fastfetch config
+    fastfetch-config = mkTest {
+      name = "fastfetch-config";
+      config = {
+        programs.fastfetch = {
+          enable = true;
+          settings = {
+            logo.type = "small";
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%LOCALAPPDATA%/fastfetch/config.jsonc";
+            msg = "fastfetch should create config.jsonc";
+          }
+        ];
+    };
+
+    # mpv config
+    mpv-config = mkTest {
+      name = "mpv-config";
+      config = {
+        programs.mpv = {
+          enable = true;
+          settings = {
+            hwdec = "auto";
+            vo = "gpu-next";
+          };
+          bindings = {
+            "WHEEL_UP" = "add volume 2";
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        let
+          mpvConf = cfg.windows.file."%APPDATA%/mpv/mpv.conf".text;
+        in
+        [
+          {
+            ok = cfg.windows.file ? "%APPDATA%/mpv/mpv.conf";
+            msg = "mpv should create mpv.conf";
+          }
+          {
+            ok = lib.hasInfix "hwdec=auto" mpvConf;
+            msg = "mpv.conf should contain hwdec setting";
+          }
+          {
+            ok = cfg.windows.file ? "%APPDATA%/mpv/input.conf";
+            msg = "mpv should create input.conf";
+          }
+        ];
+    };
+
+    # Rio terminal config
+    rio-config = mkTest {
+      name = "rio-config";
+      config = {
+        programs.rio = {
+          enable = true;
+          settings = {
+            editor = "code";
+            fonts.size = 16;
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%LOCALAPPDATA%/rio/config.toml";
+            msg = "rio should create config.toml";
+          }
+        ];
+    };
+
     # Recursive directory deployment option
     recursive-file = mkTest {
       name = "recursive-file";

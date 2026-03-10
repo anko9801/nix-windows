@@ -50,6 +50,16 @@
         glazewm = ./modules/glazewm.nix;
         autohotkey = ./modules/autohotkey.nix;
         flow-launcher = ./modules/flow-launcher.nix;
+        wezterm = ./modules/wezterm.nix;
+        alacritty = ./modules/alacritty.nix;
+        espanso = ./modules/espanso.nix;
+        powertoys = ./modules/powertoys.nix;
+        firefox = ./modules/firefox.nix;
+        nushell = ./modules/nushell.nix;
+        oh-my-posh = ./modules/oh-my-posh.nix;
+        fastfetch = ./modules/fastfetch.nix;
+        mpv = ./modules/mpv.nix;
+        rio = ./modules/rio.nix;
       };
 
       builtinModules = nixpkgs.lib.attrValues moduleSet;
