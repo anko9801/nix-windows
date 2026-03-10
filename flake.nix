@@ -46,6 +46,10 @@
         tasks = ./modules/tasks.nix;
         winget = ./modules/winget.nix;
         wsl = ./modules/wsl.nix;
+        ssh = ./modules/ssh.nix;
+        glazewm = ./modules/glazewm.nix;
+        autohotkey = ./modules/autohotkey.nix;
+        flow-launcher = ./modules/flow-launcher.nix;
       };
 
       builtinModules = nixpkgs.lib.attrValues moduleSet;

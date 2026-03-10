@@ -387,6 +387,131 @@ in
         ];
     };
 
+    # SSH config generation
+    ssh-config = mkTest {
+      name = "ssh-config";
+      config = {
+        programs.ssh = {
+          enable = true;
+          matchBlocks = {
+            "github.com" = {
+              hostname = "github.com";
+              user = "git";
+              identityFile = "~/.ssh/id_ed25519";
+            };
+            "dev-server" = {
+              hostname = "10.0.0.1";
+              user = "deploy";
+              port = 2222;
+              forwardAgent = true;
+            };
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        let
+          sshConfig = cfg.windows.file."%USERPROFILE%/.ssh/config".text;
+        in
+        [
+          {
+            ok = cfg.windows.file ? "%USERPROFILE%/.ssh/config";
+            msg = "ssh module should create a config file entry";
+          }
+          {
+            ok = lib.hasInfix "Host github.com" sshConfig;
+            msg = "ssh config should contain Host github.com";
+          }
+          {
+            ok = lib.hasInfix "IdentityFile ~/.ssh/id_ed25519" sshConfig;
+            msg = "ssh config should contain IdentityFile";
+          }
+          {
+            ok = lib.hasInfix "Port 2222" sshConfig;
+            msg = "ssh config should contain Port";
+          }
+          {
+            ok = lib.hasInfix "ForwardAgent yes" sshConfig;
+            msg = "ssh config should contain ForwardAgent";
+          }
+        ];
+    };
+
+    # GlazeWM config
+    glazewm-config = mkTest {
+      name = "glazewm-config";
+      config = {
+        programs.glazewm = {
+          enable = true;
+          settings = {
+            general = {
+              border_width = 2;
+            };
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%USERPROFILE%/.glzr/glazewm/config.yaml";
+            msg = "glazewm module should create config.yaml file entry";
+          }
+        ];
+    };
+
+    # AutoHotkey script deployment
+    autohotkey-scripts = mkTest {
+      name = "autohotkey-scripts";
+      config = {
+        programs.autohotkey = {
+          enable = true;
+          scripts = {
+            "remap.ahk" = "CapsLock::Ctrl";
+            "launch.ahk" = "#n::Run notepad";
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%USERPROFILE%/Documents/AutoHotkey/remap.ahk";
+            msg = "autohotkey should deploy remap.ahk";
+          }
+          {
+            ok = cfg.windows.file ? "%USERPROFILE%/Documents/AutoHotkey/launch.ahk";
+            msg = "autohotkey should deploy launch.ahk";
+          }
+          {
+            ok = cfg.windows.file."%USERPROFILE%/Documents/AutoHotkey/remap.ahk".text == "CapsLock::Ctrl";
+            msg = "remap.ahk should have correct content";
+          }
+        ];
+    };
+
+    # Flow Launcher settings
+    flow-launcher-settings = mkTest {
+      name = "flow-launcher-settings";
+      config = {
+        programs.flow-launcher = {
+          enable = true;
+          settings = {
+            Hotkey = "Alt+Space";
+            Language = "en";
+          };
+        };
+      };
+      assertions =
+        { cfg, ... }:
+        [
+          {
+            ok = cfg.windows.file ? "%APPDATA%/FlowLauncher/Settings/Settings.json";
+            msg = "flow-launcher should create Settings.json file entry";
+          }
+        ];
+    };
+
     # Recursive directory deployment option
     recursive-file = mkTest {
       name = "recursive-file";

@@ -20,4 +20,8 @@
   ../modules/tasks.nix
   ../modules/winget.nix
   ../modules/wsl.nix
+  ../modules/ssh.nix
+  ../modules/glazewm.nix
+  ../modules/autohotkey.nix
+  ../modules/flow-launcher.nix
 ]

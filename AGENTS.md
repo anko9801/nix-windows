@@ -40,6 +40,8 @@ Core files:
 3. In `config`, use `lib.mkIf cfg.enable (lib.mkMerge [...])` for conditional definitions
 4. Map options to `windows.file`
 5. Add the module path to `builtinModules` in `flake.nix`
+6. Add the module path to `tests/module-list.nix`
+7. Add tests in `tests/default.nix`
 
 Template:
 
